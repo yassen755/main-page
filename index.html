@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EGY.PAL - حاسبة السعرات والماكروز - عش بصحة!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4CAF50; /* أخضر أساسي */
+            --primary-dark: #388E3C;   /* أخضر غامق */
+            --secondary-color: #FFC107; /* أصفر ثانوي */
+            --text-color: #333;
+            --light-bg: #f8f8f8;
+            --white-bg: #ffffff;
+            --border-color: #eee;
+            --tiktok-red: #FE2C55; /* لون تيك توك */
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* تم إزالة أزرار تسجيل الخروج في الزاوية العلوية اليسرى */
+        /* .top-left-controls { ... } */
+        /* .logout-button-top { ... } */
+
+        /* App Content Styling */
+        #app-content {
+            flex-grow: 1;
+            display: block; /* تأكد من أنه مرئي دائمًا */
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .hero-section h1 {
+            font-size: 3.2em;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .hero-section p {
+            font-size: 1.3em;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            opacity: 0.9;
+        }
+        .hero-button {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.3em;
+            font-weight: 700;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .hero-button:hover {
+            background-color: #FFD740;
+            transform: translateY(-3px);
+        }
+
+        /* Section Styling */
+        .section-header {
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 30px;
+        }
+        .section-header h2 {
+            font-size: 2.5em;
+            color: var(--primary-color);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0;
+            width: 80px;
+            height: 4px;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+        }
+
+        /* Logo and Sources Section */
+        .logo-sources-section {
+            text-align: center;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: var(--white-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            max-width: 500px;
+        }
+        .logo-sources-section img {
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+        .logo-sources-section p {
+            font-size: 1.1em;
+            color: var(--text-color);
+            font-weight: 700;
+        }
+
+        /* Food Cards Grid */
+        .food-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            padding: 20px 0;
+        }
+        .food-card {
+            background-color: var(--white-bg);
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .food-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .food-card-content {
+            padding: 18px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .food-card h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+            font-size: 1.4em;
+        }
+        .food-card .calculate-button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 1.05em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .food-card .calculate-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* TikTok Section */
+        .tiktok-section {
+            background-color: var(--white-bg);
+            padding: 50px 20px;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-top: 50px;
+        }
+        .tiktok-section p {
+            font-size: 1.2em;
+            max-width: 700px;
+            margin: 0 auto 30px auto;
+        }
+        .tiktok-button {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--tiktok-red);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.3em;
+            font-weight: 700;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border: none;
+            cursor: pointer;
+        }
+        .tiktok-button:hover {
+            background-color: #CC2248;
+            transform: translateY(-3px);
+        }
+        .tiktok-icon {
+            width: 25px;
+            height: 25px;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--primary-dark);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 50px;
+        }
+        .footer p {
+            margin: 0;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        .footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer a:hover {
+            color: white;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.5em;
+            }
+            .hero-section p {
+                font-size: 1.1em;
+            }
+            .hero-button, .tiktok-button {
+                padding: 12px 25px;
+                font-size: 1.1em;
+            }
+            .food-cards-grid {
+                grid-template-columns: 1fr;
+            }
+            /* تم إزالة أزرار تسجيل الخروج */
+            /* .top-left-controls { ... } */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app-content">
+        <div class="hero-section">
+            <h1>احسب سعراتك بدقة، عش بصحة!</h1>
+            <p>دليلك الشامل لحساب السعرات الحرارية والقيم الغذائية لمختلف الأطعمة. ابدأ رحلتك نحو حياة صحية أفضل.</p>
+            <a href="https://sites.google.com/view/egypal/%D8%A7%D9%84%D8%A8%D8%AD%D8%AB-%D8%B9%D9%86-%D8%B5%D9%86%D9%81" class="hero-button">ابدأ الحساب الآن!</a>
+        </div>
+
+        <div class="container">
+            <div class="logo-sources-section">
+                <img src="egypal_logo.jpeg" alt="EGY.PAL Logo">
+                <p>المصادر:(USDA FoodData Central) و مواقع اخري متشابهة فالمعايير</p>
+            </div>
+
+            <div class="section-header">
+                <h2>الأطعمة الأكثر شعبية</h2>
+            </div>
+            <div class="food-cards-grid">
+                <div class="food-card">
+                    <div class="food-card-content">
+                        <h3>البيض</h3>
+                        <a href="https://egg-gray.vercel.app/" class="calculate-button">احسب الآن</a>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <div class="food-card-content">
+                        <h3>صدور الدجاج</h3>
+                        <a href="https://chicken1-alpha.vercel.app/" class="calculate-button">احسب الآن</a>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <div class="food-card-content">
+                        <h3>الشوفان</h3>
+                        <a href="https://share.google/XgH0rcZvCzOhVIuSJ" class="calculate-button">احسب الآن</a>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <div class="food-card-content">
+                        <h3>الأرز المصري</h3>
+                        <a href="https://egyrice.vercel.app/" class="calculate-button">احسب الآن</a>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <div class="food-card-content">
+                        <h3>الموز</h3>
+                        <a href="https://banana-gold.vercel.app/" class="calculate-button">احسب الآن</a>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <div class="food-card-content">
+                        <h3>الجبنة القريش</h3>
+                        <a href="https://cotatge-cheese.vercel.app/" class="calculate-button">احسب الآن</a>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <div class="food-card-content">
+                        <h3>السكر</h3>
+                        <a href="https://sugar-two.vercel.app/" class="calculate-button">احسب الآن</a>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <div class="food-card-content">
+                        <h3>عسل النحل</h3>
+                        <a href="https://honey-blue.vercel.app/" class="calculate-button">احسب الآن</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tiktok-section">
+                <div class="section-header">
+                    <h2>تابعنا على تيك توك!</h2>
+                </div>
+                <p>انضم إلى مجتمعنا المتنامي على تيك توك للحصول على نصائح تغذوية سريعة، وصفات صحية، وتحديات رياضية ممتعة!</p>
+                <a href="https://www.tiktok.com/@yazzflex4?_t=ZS-8y3FUydwh17&_r=1" target="_blank" class="tiktok-button">
+                    تابعنا على تيك توك
+                    <svg class="tiktok-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.012 2.00411C12.4411 2.00411 12.8702 2.00411 13.2993 2.00411V11.1396C13.2993 12.2882 13.9118 13.3917 14.8604 14.0754C15.8091 14.7592 17.0622 15.0041 18.2917 14.7744C19.5211 14.5447 20.6702 13.8447 21.4646 12.8596C22.259 11.8744 22.6517 10.6687 22.5857 9.42398C22.5197 8.17929 22.0039 6.98964 21.1396 6.07185C20.2754 5.15406 19.1091 4.54157 17.8465 4.30411V7.00411C18.2033 7.00411 18.5562 7.0911 18.8821 7.26081C19.2081 7.43053 19.5009 7.67914 19.7423 7.99052C19.9836 8.3019 20.1691 8.66986 20.2884 9.07185C20.4076 9.47384 20.4578 9.89791 20.4357 10.3196C20.4137 10.7413 20.3191 11.1604 20.1555 11.554C19.9919 11.9475 19.7618 12.3081 19.4776 12.6272C19.1934 12.9463 18.8604 13.2305 18.4893 13.4739C18.1182 13.7172 17.7126 13.9161 17.2842 14.066C16.8557 14.2159 16.4069 14.3168 15.9529 14.4124 15.0441 14.4061 14.5947 14.3458C14.1453 14.2855 13.7058 14.1711 13.2993 14.0041V2.00411H12.012C10.7494 2.00411 9.49626 2.25145 8.27139 2.70992C7.04652 3.16839 5.86986 3.83733 4.80918 4.69741C3.74850 5.55750 2.82776 6.59858 2.09918 7.77708C1.37061 8.95558 0.844727 10.2592 0.540455 11.6493C0.236183 13.0394 0.153720 14.4842 0.297402 15.9006C0.441085 17.3170 0.812224 18.6853 1.39994 19.9575C1.98766 21.2298 2.78440 22.3927 3.75908 23.3855C4.73377 24.3782 5.87523 25.1768 7.12781 25.7352C8.38040 26.2936 9.72252 26.6039 11.0850 26.6579H11.0967V14.3041C11.0967 13.1555 10.4842 12.0519 9.53559 11.3681C8.58697 10.6844 7.33382 10.4396 6.10435 10.6693C4.87489 10.8991 3.72579 11.5991 2.93132 12.5842C2.13685 13.5694 1.74418 14.7750 1.81012 16.0196C1.87607 17.2643 2.39185 18.4539 3.25615 19.3717C4.12044 20.2895 5.28674 20.9020 6.54930 21.1396C7.81186 21.3770 9.06501 21.1396 10.0136 20.4558C10.9622 19.7720 11.5747 18.6685 11.5747 17.5196H11.5857V2.00411H12.012Z" fill="white"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="container">
+                <p>&copy; 2024 EGY.PAL. جميع الحقوق محفوظة.</p>
+                <p><a href="https://privacy-gray.vercel.app/">سياسة الخصوصية</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // تم إزالة جميع أكواد Firebase JavaScript هنا.
+        // لم يعد هناك حاجة لمراقبة حالة تسجيل الدخول أو التعامل مع أزرار تسجيل الخروج/الدخول.
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // بما أنه لا يوجد نظام تسجيل دخول، زر hero-button سينتقل مباشرة
+            const heroButton = document.querySelector('.hero-section .hero-button');
+            // لا يوجد منطق هنا لمنع الوصول بعد الآن
+        });
+    </script>
+</body>
+</html>
